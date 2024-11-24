@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Sound_Manager : MonoBehaviour
+public class Sounds : MonoBehaviour
 {
-    public string sounds name;
+    public string soundName;
     public AudioClip clip;
 }
