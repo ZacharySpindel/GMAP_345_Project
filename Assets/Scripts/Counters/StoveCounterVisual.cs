@@ -21,5 +21,6 @@ public class StoveCounterVisual : MonoBehaviour
         stoveOnGameObject.SetActive(ShowVisual);
         particlesOnGameObject.SetActive(ShowVisual);
 
+        AudioManager.Instance.PlaySFX("PanFry");    // will need touching up
     }
 }

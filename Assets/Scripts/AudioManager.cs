@@ -22,7 +22,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start(){
         // for background music vvvvv
-        // PlayMusic("whatever the string name is here");
+        PlayMusic("DayTheme");
     }
 
     public void PlayMusic(string name){
@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
     }
 
     public void PlaySFX(string name){
-        Sounds s = Array.Find(musicSounds, x => x.name == name);
+        Sounds s = Array.Find(sfxSounds, x => x.name == name);
 
         if (s == null){
             Debug.Log("Sound not found");
