@@ -5,7 +5,7 @@ using UnityEngine;
 public class CashManager : MonoBehaviour
 {
     public static CashManager Instance { get; private set; }
-    
+
     public float cash;
 
     private void Awake()
@@ -13,15 +13,18 @@ public class CashManager : MonoBehaviour
         Instance = this;
     }
 
-    public float GetCashValue(){
+    public float GetCashValue()
+    {
         return cash;
     }
 
-    public void AddToCash(float value){
+    public void AddToCash(float value)
+    {
         cash += value;
     }
 
-    public void SubtractCash(float value){
+    public void SubtractCash(float value)
+    {
         cash -= value;
     }
 }

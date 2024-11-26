@@ -9,8 +9,10 @@ public class RecipeSO : ScriptableObject
 {
     public List<KitchenObjectSO> kitchenObjectSOList;
     public string recipeName;
-    public string tableID; 
+
+    public string tableID;
+
     public float itemRPs;
     public float goldValue;
-}
 
+}

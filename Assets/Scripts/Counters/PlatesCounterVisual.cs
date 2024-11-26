@@ -30,8 +30,6 @@ public class PlatesCounterVisual : MonoBehaviour
         GameObject plateGameObject = plateVisualGameObjectList[plateVisualGameObjectList.Count - 1];
         plateVisualGameObjectList.Remove(plateGameObject);
         Destroy(plateGameObject);
-
-        AudioManager.Instance.PlaySFX("Dish");
     }
 
     private void PlatesCounter_OnPlateSpawned(object sender, System.EventArgs e)

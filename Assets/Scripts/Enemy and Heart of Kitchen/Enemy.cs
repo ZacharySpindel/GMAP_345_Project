@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public int enemyDamage = 5;           // Damage dealt to the goal upon reaching it
     public bool diedToGoal = false;
 
+
     private NavMeshAgent agent;
     private Transform goal;
 
@@ -30,9 +31,6 @@ public class Enemy : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
-            //if(diedToGoal){
-            //Instantiate(goldPrefab, transform.position, transform.rotation);
-            //}
         }
     }
 
@@ -58,7 +56,6 @@ public class Enemy : MonoBehaviour
             {
                 // Damage the goal using the enemyDamage variable, then set health to 0
                 goalScript.TakeDamage(enemyDamage);
-                //diedToGoal = true;
                 health = 0;
             }
         }

@@ -10,6 +10,7 @@ public class ContainerCounter : BaseCounter
     
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
+
     public override void Interact(Player player)
     {
        if (!player.HasKitchenObject()) //if player isn't carrying anything
@@ -19,14 +20,14 @@ public class ContainerCounter : BaseCounter
 
 
             OnPlayerGrabObject?.Invoke(this, EventArgs.Empty); //you've grabbed this object. event args empty is a formality I'm pretty sure
-
+                
 
             //Debug.Log(kitchenObjectTransform.GetComponent<KitchenObject>().GetKitchenObjectSO().objectName);
         }
 
 
 
-
+       
     }
 
 

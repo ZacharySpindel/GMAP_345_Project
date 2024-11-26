@@ -16,6 +16,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ad24f8ee4e09cbb41b4cff162b559320, type: 2}
   - {fileID: 11400000, guid: ca35fd0d439653144bc91c857f0e967d, type: 2}
   recipeName: Burger
-  tableID: 
-  itemRPs: 10
-  goldValue: 0
