@@ -1,30 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class CashManager : MonoBehaviour
 {
     public static CashManager Instance { get; private set; }
 
-    public float cash;
+    private int currentCash;
+
+    [SerializeField] private TMPro.TextMeshProUGUI cashText;  // Reference to the TextMeshProUGUI for displaying cash
 
     private void Awake()
     {
-        Instance = this;
+        // Singleton setup
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public float GetCashValue()
+    private void Start()
     {
-        return cash;
+        // Initialize cash and update the UI display
+        currentCash = 0;
+        UpdateCashDisplay();
     }
 
-    public void AddToCash(float value)
+    // Add cash to the current balance
+    public void AddToCash(int amount)
     {
-        cash += value;
+        currentCash += amount;
+        UpdateCashDisplay();
     }
 
-    public void SubtractCash(float value)
+    // Retrieve the current cash value
+    public int GetCashValue()
     {
-        cash -= value;
+        return currentCash;
+    }
+
+    // Update the TextMeshProUGUI to display the current cash value
+    private void UpdateCashDisplay()
+    {
+        if (cashText != null)
+        {
+            cashText.text = "Cash: $" + currentCash.ToString();
+        }
     }
 }

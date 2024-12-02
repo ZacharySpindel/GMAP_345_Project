@@ -102,9 +102,11 @@ public class DeliveryManager : MonoBehaviour
                     {
                         Debug.Log("Player delivered the correct recipe to the correct table!");
                         waitingRecipeSOList.RemoveAt(i);
+
                         // Reward for correct delivery, such as adding cash
-                        // CashManager.Instance.AddToCash(5);
-                        // Debug.Log(CashManager.Instance.GetCashValue());
+                        CashManager.Instance.AddToCash(5);
+                        Debug.Log($"Current cash: {CashManager.Instance.GetCashValue()}");
+
                         OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                         return;
                     }
@@ -126,6 +128,7 @@ public class DeliveryManager : MonoBehaviour
 
         Debug.Log($"No matching recipe found for table: {deliveryCounterID}");
     }
+
 
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
