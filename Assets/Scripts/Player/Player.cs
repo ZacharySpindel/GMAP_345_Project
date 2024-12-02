@@ -150,17 +150,32 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
 
-        // Get the current move speed (normal or sprinting)
         float moveDistance = GetCurrentMoveSpeed() * Time.deltaTime;
         float playerRadius = 1f;
         float playerHeight = 4f;
-        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+
+        bool canMove = !Physics.CapsuleCast(
+            transform.position,
+            transform.position + Vector3.up * playerHeight,
+            playerRadius,
+            moveDir,
+            moveDistance,
+            countersLayerMask,
+            QueryTriggerInteraction.Ignore // Ignore trigger colliders during the cast
+        );
 
         if (!canMove)
         {
-            // Cannot move towards moveDir, attempt only x movement
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+            canMove = !Physics.CapsuleCast(
+                transform.position,
+                transform.position + Vector3.up * playerHeight,
+                playerRadius,
+                moveDirX,
+                moveDistance,
+                countersLayerMask,
+                QueryTriggerInteraction.Ignore
+            );
 
             if (canMove)
             {
@@ -168,15 +183,21 @@ public class Player : MonoBehaviour, IKitchenObjectParent
             }
             else
             {
-                // Attempt only z movement
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                canMove = !Physics.CapsuleCast(
+                    transform.position,
+                    transform.position + Vector3.up * playerHeight,
+                    playerRadius,
+                    moveDirZ,
+                    moveDistance,
+                    countersLayerMask,
+                    QueryTriggerInteraction.Ignore
+                );
 
                 if (canMove)
                 {
                     moveDir = moveDirZ;
                 }
-                // Cannot move in any direction
             }
         }
 
