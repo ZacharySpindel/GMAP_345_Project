@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class DeliveryManagerSingleUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI recipeNameText;  // Text component to display recipe name
+    [SerializeField] private TextMeshProUGUI recipeNameText;  // Text component to display recipe name and cash value
     [SerializeField] private Transform iconContainer;         // Container to hold recipe ingredient icons
     [SerializeField] private Transform iconTemplate;          // Template for ingredient icons
     [SerializeField] private Image tableIDImage;              // Image component to display the corresponding tableID sprite
@@ -24,7 +24,8 @@ public class DeliveryManagerSingleUI : MonoBehaviour
     // Method to update the UI with the recipe's details
     public void SetRecipeSO(RecipeSO recipeSO)
     {
-        recipeNameText.text = recipeSO.recipeName;  // Set the recipe name text
+        // Update recipe name to include its cash value
+        recipeNameText.text = $"{recipeSO.recipeName} (${GetRecipeCashValue(recipeSO)})";
 
         // Clear any existing icons
         foreach (Transform child in iconContainer)
@@ -68,4 +69,26 @@ public class DeliveryManagerSingleUI : MonoBehaviour
                 break;
         }
     }
+
+    // Method to get the cash value for each recipe
+    private int GetRecipeCashValue(RecipeSO recipeSO)
+    {
+        Debug.Log($"Getting cash value for recipe: {recipeSO.recipeName}");
+
+        return recipeSO.recipeName switch
+        {
+            "Salad" => 10,
+            "Burger" => 15,
+            "CheeseBurger" => 20,
+            "MegaBurger" => 30,
+            _ => LogAndReturnDefault(recipeSO.recipeName)
+        };
+    }
+
+    private int LogAndReturnDefault(string recipeName)
+    {
+        Debug.LogWarning($"Recipe name '{recipeName}' does not match any known recipes. Returning default value of 0.");
+        return 0;
+    }
+
 }
