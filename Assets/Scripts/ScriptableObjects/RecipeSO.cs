@@ -13,6 +13,7 @@ public class RecipeSO : ScriptableObject
     public string tableID;
 
     public float itemRPs;
-    public float goldValue;
+    public int cashReward;  // Cash reward for delivering this recipe (e.g., 10 for Salad)
+
 
 }

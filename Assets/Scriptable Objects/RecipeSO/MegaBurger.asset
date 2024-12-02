@@ -19,3 +19,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4fa7e3457682e044b8f2cb2700e3f054, type: 2}
   - {fileID: 11400000, guid: c916d4e922dd8d7488e90c47722651b2, type: 2}
   recipeName: MegaBurger
+  tableID: square
+  itemRPs: 0
+  cashReward: 30

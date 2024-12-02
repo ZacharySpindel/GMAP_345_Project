@@ -17,3 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ca35fd0d439653144bc91c857f0e967d, type: 2}
   - {fileID: 11400000, guid: f4b8465376075b144ac24fd2d14230f7, type: 2}
   recipeName: CheeseBurger
+  tableID: 
+  itemRPs: 0
+  cashReward: 20
