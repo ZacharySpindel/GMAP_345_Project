@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1926668014827513673}
   - component: {fileID: 502981581100798617}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,17 +216,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 061ec7261586f6b4fbe1aff0f2fd4046,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.01
+      value: 1.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 061ec7261586f6b4fbe1aff0f2fd4046,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.716533
+      value: 2.8779113
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 061ec7261586f6b4fbe1aff0f2fd4046,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.315121
+      value: 1.3932472
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 061ec7261586f6b4fbe1aff0f2fd4046,
         type: 3}

@@ -21,33 +21,32 @@ public class DeliveryManager : MonoBehaviour
     private List<string> tableID = new List<string> { "triangle", "square", "circle", "star" };    // add diamond, pentagon, moon, and cross after testing
 
     private float spawnRecipeTimer;
-    private float spawnRecipeTimerMax =  4f;
+    private float spawnRecipeTimerMax = 4f;
     private int waitingRecipesMax = 4;
 
 
     private void Awake()
     {
-        waitingRecipeSOList = new List<RecipeSO>(); //initilize list
+        waitingRecipeSOList = new List<RecipeSO>(); // Initialize list
         Instance = this;
     }
 
     private void Update()
     {
         spawnRecipeTimer -= Time.deltaTime;
-        if(spawnRecipeTimer <= 0f )
+        if (spawnRecipeTimer <= 0f)
         {
             spawnRecipeTimer = spawnRecipeTimerMax;
 
-            //spawn recipe
-            if(waitingRecipeSOList.Count < waitingRecipesMax ) 
+            // Spawn recipe if there is room for more
+            if (waitingRecipeSOList.Count < waitingRecipesMax)
             {
                 RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)];
-               
-                waitingRecipeSOList.Add(waitingRecipeSO);
-                
-                waitingRecipeSO.tableID = RandomTableID();
-                Debug.Log(waitingRecipeSO.recipeName + ' ' + waitingRecipeSO.tableID);
 
+                waitingRecipeSOList.Add(waitingRecipeSO);
+
+                waitingRecipeSO.tableID = RandomTableID();
+                Debug.Log($"Spawned recipe: {waitingRecipeSO.recipeName} for table {waitingRecipeSO.tableID}");
 
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
@@ -56,67 +55,77 @@ public class DeliveryManager : MonoBehaviour
 
     private string RandomTableID()
     {
-        return tableID[UnityEngine.Random.Range(0, 4)]; // change 2nd condition to 8 after testing
+        return tableID[UnityEngine.Random.Range(0, 4)]; // Change to 8 after testing
     }
-
 
     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
     {
-        for(int i = 0; i < waitingRecipeSOList.Count; ++i) 
-        { 
+        Debug.Log($"Attempting to deliver to table: {deliveryCounterID}");
+
+        for (int i = 0; i < waitingRecipeSOList.Count; ++i)
+        {
             RecipeSO waitingRecipeSO = waitingRecipeSOList[i];
 
+            Debug.Log($"Checking recipe: {waitingRecipeSO.recipeName} for table: {waitingRecipeSO.tableID}");
 
-            if(waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count)
+            // Check if the recipe matches the plate's ingredients
+            if (waitingRecipeSO.kitchenObjectSOList.Count == plateKitchenObject.GetKitchenObjectSOList().Count)
             {
-                //has same nuber of ingredients, as a first check
-
                 bool plateContentsMatchesRecipe = true;
 
-                foreach(KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList)
+                foreach (KitchenObjectSO recipeKitchenObjectSO in waitingRecipeSO.kitchenObjectSOList)
                 {
-                    //cycling through all ingredients in recipe
                     bool ingredientFound = false;
+
                     foreach (KitchenObjectSO plateKitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList())
                     {
-                        //cycling through all ingredients in plate
-                        if(plateKitchenObjectSO == recipeKitchenObjectSO)
+                        if (plateKitchenObjectSO == recipeKitchenObjectSO)
                         {
-                            //ingredient matches!
                             ingredientFound = true;
                             break;
                         }
                     }
-                    if(!ingredientFound)
+
+                    if (!ingredientFound)
                     {
-                        //This recipe ingredient was not found on the plate
                         plateContentsMatchesRecipe = false;
+                        Debug.Log($"Ingredient {recipeKitchenObjectSO.name} not found on plate!");
+                        break;
                     }
                 }
 
-                if (waitingRecipeSO.tableID == deliveryCounterID) //plateContentsMatchesRecipe
+                if (waitingRecipeSO.tableID == deliveryCounterID)
                 {
-                    Debug.Log(waitingRecipeSO.tableID);
-                    //player delivers to right table
+                    Debug.Log($"Table ID matches: {waitingRecipeSO.tableID}");
+
                     if (plateContentsMatchesRecipe)
                     {
-                        //player delivered correct recipe
-                        Debug.Log("player delivered correct recipe");
+                        Debug.Log("Player delivered the correct recipe to the correct table!");
                         waitingRecipeSOList.RemoveAt(i);
-                        //give cash upon giving correct recipe
-                        CashManager.Instance.AddToCash(5);
-                        Debug.Log(CashManager.Instance.GetCashValue());
+                        // Reward for correct delivery, such as adding cash
+                        // CashManager.Instance.AddToCash(5);
+                        // Debug.Log(CashManager.Instance.GetCashValue());
                         OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                         return;
                     }
+                    else
+                    {
+                        Debug.Log("Ingredients did not match the recipe.");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"Table ID mismatch. Expected: {waitingRecipeSO.tableID}, Got: {deliveryCounterID}");
                 }
             }
+            else
+            {
+                Debug.Log($"Ingredient count mismatch. Expected: {waitingRecipeSO.kitchenObjectSOList.Count}, Got: {plateKitchenObject.GetKitchenObjectSOList().Count}");
+            }
         }
-        //no matches found
-        //player did not deliver a correct reccipe
-        Debug.Log("player did not deliver correct recipe " + deliveryCounterID);
-    }
 
+        Debug.Log($"No matching recipe found for table: {deliveryCounterID}");
+    }
 
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
