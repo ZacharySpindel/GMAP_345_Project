@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro; // Add this for TextMeshPro
+using TMPro;
+using Cinemachine;
+using System.Collections;
 
 public class DayNightDuskCycle : MonoBehaviour
 {
     public Slider timeSlider;            // Reference to the UI Slider
     public GameObject[] spawners;        // Array of spawner GameObjects
     public RectTransform rotatingImage; // Reference to the image RectTransform to rotate
-    public TextMeshProUGUI dayCounterText; // Reference to TextMeshPro for day count
-    public TextMeshProUGUI winMessageText; // Reference to TextMeshPro for win message
-    public TextMeshProUGUI finalCashText;  // Reference to TextMeshPro for final cash
+
+    public Image winImage; // Reference to the winning image
+
 
     // Durations for each phase
     public float dayDuration = 90f;
@@ -25,10 +27,24 @@ public class DayNightDuskCycle : MonoBehaviour
 
     private float timer = 0f;           // Timer to track the current phase progress
     private float currentPhaseDuration; // Current phase duration
-    private int currentDay = 1;         // Track the current day
-    private const int maxDays = 5;      // Maximum number of days for win condition
     public enum TimeOfDay { Day, Dusk, Night, Dawn }
     public TimeOfDay currentTimeOfDay;  // Current phase of the day-night cycle
+
+    // Camera references
+    public CinemachineVirtualCamera camera1;
+    public CinemachineVirtualCamera camera2;
+    public CinemachineVirtualCamera camera3;
+
+    // Days allotted counter
+    public int daysAllotted = 0;         // Variable to track the number of days allotted
+    public TMP_Text daysAllottedText;     // Reference to the TMP Text to display the value
+
+    // Reference to CashManager to get current cash value
+    public CashManager cashManager;      // Reference to the CashManager
+
+    // Reference to the UI Text to display Final Cash
+    public TMP_Text finalCashText;
+    public TMP_Text winText; // Reference to the "Win" text
 
     void Start()
     {
@@ -38,10 +54,7 @@ public class DayNightDuskCycle : MonoBehaviour
 
         UpdateSlider();                  // Initialize the slider
         UpdateSpawners();                // Set spawners correctly for the starting phase
-
-        UpdateDayCounter();              // Update the day counter UI
-        winMessageText.gameObject.SetActive(false); // Hide win message at the start
-        finalCashText.gameObject.SetActive(false);  // Hide final cash message at the start
+        SetCameraForPhase();             // Set the camera based on the starting phase
     }
 
     void Update()
@@ -58,6 +71,13 @@ public class DayNightDuskCycle : MonoBehaviour
         }
 
         UpdateSlider();
+
+        // Check if the days allotted reach 5 and display the final cash
+        if (daysAllotted >= 5)
+        {
+            DisplayFinalCash();
+            DisplayWinText();
+        }
     }
 
     private void RotateImage()
@@ -93,66 +113,38 @@ public class DayNightDuskCycle : MonoBehaviour
 
     private void TransitionToNextPhase()
     {
+        // Transition to the next phase
         switch (currentTimeOfDay)
         {
             case TimeOfDay.Day:
                 currentTimeOfDay = TimeOfDay.Dusk;
                 currentPhaseDuration = duskDuration;
-                Debug.Log("Switching to Dusk");
-
-                // Increment the day count when transitioning from Day to Dusk
-                IncrementDayCount();
+                SetCameraForPhase(); // Update the camera for dusk
                 break;
-
             case TimeOfDay.Dusk:
                 currentTimeOfDay = TimeOfDay.Night;
                 currentPhaseDuration = nightDuration;
-                Debug.Log("Switching to Night");
+                SetCameraForPhase(); // Update the camera for night
                 break;
-
             case TimeOfDay.Night:
                 currentTimeOfDay = TimeOfDay.Dawn;
                 currentPhaseDuration = dawnDuration;
-                Debug.Log("Switching to Dawn");
+                SetCameraForPhase(); // Update the camera for dawn
                 break;
-
             case TimeOfDay.Dawn:
                 currentTimeOfDay = TimeOfDay.Day;
                 currentPhaseDuration = dayDuration;
-                Debug.Log("Switching to Day");
+                SetCameraForPhase(); // Update the camera for day
+
+                // Increment days once during the Dawn phase
+                daysAllotted++;
+                UpdateDaysText(); // Update the displayed days allotted text
                 break;
         }
 
         // Reset timer and update spawners
         timer = 0f;
         UpdateSpawners();
-    }
-
-    private void IncrementDayCount()
-    {
-        currentDay++;
-        UpdateDayCounter();
-
-        if (currentDay > maxDays)
-        {
-            TriggerWinCondition();
-        }
-    }
-
-    private void TriggerWinCondition()
-    {
-        Time.timeScale = 0; // Pause the game
-        winMessageText.text = "You Win!";
-        winMessageText.gameObject.SetActive(true);
-
-        int finalCash = CashManager.Instance.GetCashValue();
-        finalCashText.text = $"Final Cash: ${finalCash}";
-        finalCashText.gameObject.SetActive(true);
-    }
-
-    private void UpdateDayCounter()
-    {
-        dayCounterText.text = $"Days: {currentDay}/{maxDays}";
     }
 
     private void UpdateSpawners()
@@ -163,7 +155,6 @@ public class DayNightDuskCycle : MonoBehaviour
         foreach (GameObject spawner in spawners)
         {
             spawner.SetActive(isNight); // Enable or disable the spawner
-            spawner.GetComponent<EnemySpawner>()?.SetActive(isNight); // Resume spawning if enabled
         }
 
         Debug.Log($"Current Time of Day: {currentTimeOfDay}. Spawners active: {isNight}");
@@ -174,5 +165,72 @@ public class DayNightDuskCycle : MonoBehaviour
         // Update the slider value based on the current phase progress
         float value = 1 - (timer / currentPhaseDuration);
         timeSlider.value = Mathf.Clamp01(value);
+    }
+
+    // Switch camera based on the time of day
+    private void SetCameraForPhase()
+    {
+        switch (currentTimeOfDay)
+        {
+            case TimeOfDay.Day:
+                camera1.gameObject.SetActive(true);
+                camera2.gameObject.SetActive(false);
+                camera3.gameObject.SetActive(false);
+                break;
+            case TimeOfDay.Night:
+                camera1.gameObject.SetActive(false);
+                camera2.gameObject.SetActive(true);
+                camera3.gameObject.SetActive(false);
+                break;
+            case TimeOfDay.Dusk:
+                camera1.gameObject.SetActive(false);
+                camera2.gameObject.SetActive(false);
+                camera3.gameObject.SetActive(true);
+                break;
+            case TimeOfDay.Dawn:
+                camera1.gameObject.SetActive(false);
+                camera2.gameObject.SetActive(false);
+                camera3.gameObject.SetActive(false); // Optional: keep it off during dawn, or choose a specific camera
+                break;
+        }
+    }
+
+    // Update the displayed days allotted value
+    private void UpdateDaysText()
+    {
+        if (daysAllottedText != null)
+        {
+            daysAllottedText.text = "Days Allotted: " + daysAllotted.ToString();
+        }
+    }
+
+    // Display the final cash when the player wins
+    private void DisplayFinalCash()
+    {
+        if (finalCashText != null && cashManager != null)
+        {
+            Debug.Log("Final Cash: " + cashManager.GetCashValue());
+            finalCashText.text = "Final Cash: " + cashManager.GetCashValue().ToString();
+        }
+        else
+        {
+            Debug.LogWarning("CashManager or FinalCashText is not assigned!");
+        }
+    }
+
+    // Display win text when the player reaches 5 days
+    private void DisplayWinText()
+    {
+        if (winText != null)
+        {
+            winText.text = "You Win!";
+            winText.gameObject.SetActive(true); // Make sure the Win text is visible
+        }
+
+        if (winImage != null)
+        {
+            winImage.gameObject.SetActive(true); // Make sure the winning image is visible
+        }
+
     }
 }

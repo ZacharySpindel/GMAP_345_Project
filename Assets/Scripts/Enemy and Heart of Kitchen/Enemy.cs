@@ -35,18 +35,18 @@ public class Enemy : MonoBehaviour
     }
 
     // Detect collisions with the projectile
-    private void OnCollisionEnter(Collision collision)
+    private void OnProjectileTriggerEnter(Collider collider)
     {
         // Check if hit by a projectile
-        if (collision.gameObject.CompareTag("Projectile"))
+        if (collider.gameObject.CompareTag("Projectile"))
         {
             TakeDamage(health);           // Sets health to 0, destroying the enemy
-            Destroy(collision.gameObject); // Destroy the projectile upon impact
+            Destroy(collider.gameObject); // Destroy the projectile upon impact
         }
     }
 
     // Detect triggers with the goal
-    private void OnTriggerEnter(Collider other)
+    private void OnGoalTriggerEnter(Collider other)
     {
         // Check if collided with the goal
         if (other.CompareTag("Goal"))

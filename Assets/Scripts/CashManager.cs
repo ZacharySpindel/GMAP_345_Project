@@ -33,9 +33,9 @@ public class CashManager : MonoBehaviour
     public void AddToCash(int amount)
     {
         currentCash += amount;
+        Debug.Log("Cash Added: " + amount + ", New Cash: " + currentCash); // Debug log to track cash changes
         UpdateCashDisplay();
     }
-
     // Retrieve the current cash value
     public int GetCashValue()
     {
