@@ -154,4 +154,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1670066519336781117, guid: 031750cba8c13644a803d8b4328d328c,
     type: 3}
+  spawnPoint: {fileID: 2418657484450058945}
   spawnInterval: 15

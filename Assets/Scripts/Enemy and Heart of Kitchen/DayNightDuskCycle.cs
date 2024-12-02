@@ -149,16 +149,24 @@ public class DayNightDuskCycle : MonoBehaviour
 
     private void UpdateSpawners()
     {
-        // Activate spawners only during the Night phase
         bool isNight = currentTimeOfDay == TimeOfDay.Night;
 
         foreach (GameObject spawner in spawners)
         {
-            spawner.SetActive(isNight); // Enable or disable the spawner
+            var spawnerScript = spawner.GetComponent<EnemySpawner>();
+            if (spawnerScript != null)
+            {
+                spawnerScript.SetSpawnerActive(isNight);
+            }
+            else
+            {
+                spawner.SetActive(isNight); // Fallback to enabling/disabling GameObject
+            }
         }
 
         Debug.Log($"Current Time of Day: {currentTimeOfDay}. Spawners active: {isNight}");
     }
+
 
     private void UpdateSlider()
     {
@@ -233,4 +241,7 @@ public class DayNightDuskCycle : MonoBehaviour
         }
 
     }
+
+
+
 }
