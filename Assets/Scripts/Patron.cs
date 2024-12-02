@@ -9,7 +9,11 @@ public class Patron : MonoBehaviour
     private float correctOrderCounter;  // how many correct orders you provide
     private float recruitThreshold = 30; // Points needed to change states
 
-    public Vector3 tablePosition;
+    public Transform tablePosition;
+    public Transform stationPosition;
+    
+    private UnityEngine.AI.NavMeshAgent navmesh;
+    public float moveSpeed = 4f;    // patron move speed
 
 // turret stuff
     [SerializeField] private float fireRate = 1f;
@@ -31,7 +35,9 @@ public class Patron : MonoBehaviour
     void Start()
     {
         currentStatus = patronType.Customer; // Start with Customer
-        BackToTable();
+        navmesh = GetComponent<UnityEngine.AI.NavMeshAgent>(); // sets up navmesh
+        navmesh.speed = moveSpeed;
+        MoveToPoint(tablePosition);
         // find table that matches IDs
         // get that table's position
         // move to that table (NavMesh?)
@@ -61,7 +67,7 @@ public class Patron : MonoBehaviour
         // this is what the patrons will be doing as those states (dawn)
 
         if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Dawn){
-            BackToTable();  // regardless as to what they're status is, patrons always go back to their tables upon morning
+            MoveToPoint(tablePosition);  // regardless as to what their status is, patrons always go back to their tables upon morning
         }
 
         // day
@@ -69,20 +75,21 @@ public class Patron : MonoBehaviour
             // blank for now
         }
         // dusk
-        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
-            // go to station
+        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Dusk){
+            MoveToPoint(stationPosition);   // moves to predetermined position
         }
         // night
-        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
+        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Night){
             TurretMode();
         }
     }
 
     // a patron needs to move to tables associated to them
-    public void BackToTable()
+    public void MoveToPoint(Transform transform)
     {
-
+        navmesh.SetDestination(transform.position);
     }
+    
     // a recruited patron needs to go back into customer when dawn hits (we need dawn as well)
     public void RecruitToCustomer()
     {
