@@ -51,9 +51,6 @@ public class DeliveryManager : MonoBehaviour
 
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
-            
-
-
         }
     }
 
@@ -113,13 +110,11 @@ public class DeliveryManager : MonoBehaviour
                         return;
                     }
                 }
-
             }
         }
         //no matches found
         //player did not deliver a correct reccipe
         Debug.Log("player did not deliver correct recipe " + deliveryCounterID);
-
     }
 
 
@@ -127,7 +122,4 @@ public class DeliveryManager : MonoBehaviour
     {
         return waitingRecipeSOList;
     }
-
-
-
 }

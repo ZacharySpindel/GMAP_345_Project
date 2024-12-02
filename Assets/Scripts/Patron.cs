@@ -9,11 +9,25 @@ public class Patron : MonoBehaviour
     private float correctOrderCounter;  // how many correct orders you provide
     private float recruitThreshold = 30; // Points needed to change states
 
+    public Vector3 tablePosition;
+
+// turret stuff
+    [SerializeField] private float fireRate = 1f;
+    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private float forwardForce = 10f;
+    public float initialFireDelay = 1f; // Public initial delay variable
+
+    private Transform target;
+    private float fireCooldown;
+    private float fireDelayTimer;
+// end of turret stuff
+
     public DayNightDuskCycle dayNightDuskCycle;
 
     public string patronTableID;
 
-    // Start is called before the first frame update
     void Start()
     {
         currentStatus = patronType.Customer; // Start with Customer
@@ -23,7 +37,6 @@ public class Patron : MonoBehaviour
         // move to that table (NavMesh?)
     }
 
-    // Update is called once per frame
     void Update()
     {
         // if the amount of correct orders exceeds this threshold, then change their status
@@ -44,6 +57,25 @@ public class Patron : MonoBehaviour
                     break;
             }
         }
+
+        // this is what the patrons will be doing as those states (dawn)
+
+        if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Dawn){
+            BackToTable();  // regardless as to what they're status is, patrons always go back to their tables upon morning
+        }
+
+        // day
+        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
+            // blank for now
+        }
+        // dusk
+        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
+            // go to station
+        }
+        // night
+        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
+            TurretMode();
+        }
     }
 
     // a patron needs to move to tables associated to them
@@ -60,18 +92,73 @@ public class Patron : MonoBehaviour
         }
     }
 
-    // patrons will attack enemies with projectiles (?)
-    public void AttackEnemies()
-    {
-        // aim at enemies
-        // shoot projectile
-    }
-
     // math behind patron recruit points
     public void PatronRecruitPoints()
     {
         //lettuce & tomato = 5, cheese = 10, meat & bun = 5
 
 
+    }
+
+    // turret mode
+
+    private void TurretMode()
+    {
+        if (fireDelayTimer > 0f)
+        {
+            fireDelayTimer -= Time.deltaTime;
+            return;
+        }
+
+        // Proceed with targeting and firing after the initial delay
+        if (target != null)
+        {
+            RotateTowardsTarget();
+
+            if (fireCooldown <= 0f)
+            {
+                Shoot();
+                fireCooldown = 1f / fireRate;
+            }
+            fireCooldown -= Time.deltaTime;
+        }
+    }
+
+    private void RotateTowardsTarget()
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+    }
+
+    private void Shoot()
+    {
+        GameObject projectile = Instantiate(projectilePrefab, shootPoint.position, shootPoint.rotation);
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            rb.AddForce(shootPoint.forward * forwardForce, ForceMode.Impulse);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player")){
+            Debug.Log("collider works");
+        }
+
+        if (other.CompareTag("Enemy") && target == null)
+        {
+            target = other.transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Enemy") && other.transform == target)
+        {
+            target = null;
+        }
     }
 }
