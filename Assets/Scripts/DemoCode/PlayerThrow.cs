@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerThrow : MonoBehaviour
 {
-    [SerializeField] private GameObject projectilePrefab; // Assign the projectile prefab in the Inspector
+    [SerializeField] private GameObject regularProjectilePrefab; // Regular projectile
+    [SerializeField] private GameObject burgerProjectilePrefab;  // Burger AOE projectile
+    [SerializeField] private GameObject saladProjectilePrefab;  // Salad projectile
+    [SerializeField] private GameObject cheeseburgerProjectilePrefab;  // Cheeseburger projectile
+    [SerializeField] private GameObject megaBurgerProjectilePrefab;  // MegaBurger projectile
     [SerializeField] private float throwForce = 10f; // Force with which the projectile is thrown
     [SerializeField] private Transform throwPoint; // Reference to the empty GameObject (throw point)
     private Player player; // Reference to the Player component
@@ -38,45 +43,131 @@ public class PlayerThrow : MonoBehaviour
         // Check if the player has a kitchen object
         if (player.HasKitchenObject())
         {
-            // Get the kitchen object and its visual representation
+            // Get the kitchen object
             KitchenObject kitchenObject = player.GetKitchenObject();
-            GameObject kitchenObjectVisual = kitchenObject.gameObject; // Assuming the kitchen object itself is the visual
+            GameObject kitchenObjectVisual = kitchenObject.gameObject; // The visual representation
 
-            // Remove the kitchen object from the player
-            player.ClearKitchenObject();
-
-            // Hide the visual representation (optional)
-            kitchenObjectVisual.SetActive(false);
-
-            // Spawn the projectile at the throw point's position and rotation
-            GameObject projectile = Instantiate(projectilePrefab, throwPoint.position, throwPoint.rotation);
-
-            // Set the collider of the projectile to trigger mode (if not already done in the prefab)
-            Collider projectileCollider = projectile.GetComponent<Collider>();
-            if (projectileCollider != null)
+            // Check if the kitchen object is a Plate
+            if (kitchenObject is PlateKitchenObject plateKitchenObject)
             {
-                projectileCollider.isTrigger = true;
-            }
-
-            // Get the Rigidbody component and apply the throw force
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                // Apply force to the projectile in the direction the throw point is facing
-                rb.AddForce(throwPoint.forward * throwForce, ForceMode.Impulse);
-
-                // Disable bounce and other reactions after the throw
-                rb.drag = 0; // Disable linear drag if not needed (optional)
-                rb.angularDrag = 0; // Disable angular drag if not needed (optional)
-                rb.useGravity = false; // Disable gravity if you don't want it to fall (optional)
-
-                // Optional: Set the Rigidbody's velocity to simulate smooth movement
-                rb.velocity = rb.velocity.normalized * throwForce; // Ensure constant speed, adjust for your needs
+                // Check for specific ingredient combinations
+                if (HasMegaBurgerIngredients(plateKitchenObject))
+                {
+                    Debug.Log("Plate contains MegaBurger ingredients. Spawning mega burger projectile.");
+                    SpawnProjectile(megaBurgerProjectilePrefab);
+                }
+                else if (HasCheeseburgerIngredients(plateKitchenObject))
+                {
+                    Debug.Log("Plate contains Cheeseburger ingredients. Spawning cheeseburger projectile.");
+                    SpawnProjectile(cheeseburgerProjectilePrefab);
+                }
+                else if (HasBurgerIngredients(plateKitchenObject))
+                {
+                    Debug.Log("Plate contains Burger ingredients. Spawning burger projectile.");
+                    SpawnProjectile(burgerProjectilePrefab);
+                }
+                else if (HasSaladIngredients(plateKitchenObject))
+                {
+                    Debug.Log("Plate contains Salad ingredients. Spawning salad projectile.");
+                    SpawnProjectile(saladProjectilePrefab);
+                }
+                else
+                {
+                    // Default to regular projectile if no recipe is matched
+                    Debug.Log("Plate doesn't contain a known recipe. Spawning regular projectile.");
+                    SpawnProjectile(regularProjectilePrefab);
+                }
             }
             else
             {
-                Debug.LogError("Projectile prefab does not have a Rigidbody component!");
+                // If it's not a plate, spawn a regular projectile
+                Debug.Log("Player is holding a non-plate item. Spawning regular projectile.");
+                SpawnProjectile(regularProjectilePrefab);
             }
+
+            // Hide the kitchen object visual representation (optional, if desired)
+            kitchenObjectVisual.SetActive(false);
+
+            // After throwing the kitchen object, remove it from the player (clear it)
+            player.ClearKitchenObject();
+
+            // Ensure the player is no longer holding the kitchen object
+            if (!player.HasKitchenObject())
+            {
+                Debug.Log("Player no longer has a kitchen object after throw.");
+            }
+            else
+            {
+                Debug.Log("Player still has a kitchen object!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Player does not have a kitchen object to throw.");
+        }
+    }
+
+    // Helper methods to check if the plate contains specific ingredients for each recipe
+
+    private bool HasBurgerIngredients(PlateKitchenObject plateKitchenObject)
+    {
+        // Exactly 2 ingredients: Bread, MeatPattyCooked
+        return ContainsExactlyIngredients(plateKitchenObject, new string[] { "Bread", "MeatPattyCooked" });
+    }
+
+    private bool HasCheeseburgerIngredients(PlateKitchenObject plateKitchenObject)
+    {
+        // Exactly 3 ingredients: Bread, MeatPattyCooked, CheeseSliced
+        return ContainsExactlyIngredients(plateKitchenObject, new string[] { "Bread", "MeatPattyCooked", "CheeseSliced" });
+    }
+
+    private bool HasSaladIngredients(PlateKitchenObject plateKitchenObject)
+    {
+        // Exactly 2 ingredients: Tomato, Cabbage
+        return ContainsExactlyIngredients(plateKitchenObject, new string[] { "Tomato", "Cabbage" });
+    }
+
+    private bool HasMegaBurgerIngredients(PlateKitchenObject plateKitchenObject)
+    {
+        // Exactly 5 ingredients: Bread, MeatPattyCooked, CheeseSliced, Tomato, Cabbage
+        return ContainsExactlyIngredients(plateKitchenObject, new string[] { "Bread", "MeatPattyCooked", "CheeseSliced", "Tomato", "Cabbage" });
+    }
+
+    // Helper method to check if the plate contains exactly the required ingredients
+    private bool ContainsExactlyIngredients(PlateKitchenObject plateKitchenObject, string[] requiredIngredients)
+    {
+        List<string> plateIngredients = new List<string>();
+
+        // Add the names of the kitchen objects on the plate to the plateIngredients list
+        foreach (KitchenObjectSO kitchenObjectSO in plateKitchenObject.GetKitchenObjectSOList())
+        {
+            plateIngredients.Add(kitchenObjectSO.name);
+        }
+
+        // Sort both lists to ensure the order doesn't affect the comparison
+        plateIngredients.Sort();
+        List<string> requiredIngredientsList = new List<string>(requiredIngredients);
+        requiredIngredientsList.Sort();
+
+        // Compare the two lists: they must contain the exact same ingredients
+        return plateIngredients.Count == requiredIngredientsList.Count && plateIngredients.SequenceEqual(requiredIngredientsList);
+    }
+
+    // Method to spawn the projectile at the throw point
+    private void SpawnProjectile(GameObject projectilePrefab)
+    {
+        // Spawn the projectile at the throw point's position and rotation
+        GameObject projectile = Instantiate(projectilePrefab, throwPoint.position, throwPoint.rotation);
+
+        // Apply throw force to the projectile
+        Rigidbody rb = projectile.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(throwPoint.forward * throwForce, ForceMode.Impulse);
+        }
+        else
+        {
+            Debug.LogError("Projectile prefab does not have a Rigidbody component!");
         }
     }
 }

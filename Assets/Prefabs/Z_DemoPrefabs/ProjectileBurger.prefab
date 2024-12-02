@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.46991634, b: 0, a: 1}
+      maxColor: {r: 0, g: 0.9226117, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5111,7 +5111,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.46991634, b: 0, a: 1}
+      maxColor: {r: 0, g: 0.9226117, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -14619,8 +14619,8 @@ GameObject:
   - component: {fileID: -8676430914557819747}
   - component: {fileID: 5266516437021321821}
   m_Layer: 0
-  m_Name: ProjectileTomato
-  m_TagString: Projectile
+  m_Name: ProjectileBurger
+  m_TagString: ProjectileBurger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14930,7 +14930,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.46991634, b: 0, a: 1}
+      maxColor: {r: 0, g: 0.9226117, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -34495,6 +34495,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 227977882311665457, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 227977882311665457, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.9226117
+      objectReference: {fileID: 0}
+    - target: {fileID: 227977882311665457, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1347169707721247358, guid: c17cb0f24f9970442aa7db581cb18744,
         type: 3}
       propertyPath: m_IsActive
@@ -34575,6 +34590,21 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5477587624471906472, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.6650944
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477587624471906472, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.27569655
+      objectReference: {fileID: 0}
+    - target: {fileID: 5477587624471906472, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.06588199
+      objectReference: {fileID: 0}
     - target: {fileID: 6558791768364880554, guid: c17cb0f24f9970442aa7db581cb18744,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -34599,6 +34629,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Parameters.widthMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6883627107258230810, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6883627107258230810, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.06660771
+      objectReference: {fileID: 0}
+    - target: {fileID: 6883627107258230810, guid: c17cb0f24f9970442aa7db581cb18744,
+        type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9202079568101928885, guid: c17cb0f24f9970442aa7db581cb18744,
         type: 3}

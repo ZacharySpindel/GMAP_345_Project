@@ -48,6 +48,13 @@ public class Enemy : MonoBehaviour
         if (other.CompareTag("Projectile"))
         {
             // Take damage and destroy the projectile
+            TakeDamage(5); // Assuming each projectile does 1 damage
+            Destroy(other.gameObject);
+        }
+        
+        if (other.CompareTag("ProjectileBurger"))
+        {
+            // Take damage and destroy the projectile
             TakeDamage(100); // Assuming each projectile does 1 damage
             Destroy(other.gameObject);
         }

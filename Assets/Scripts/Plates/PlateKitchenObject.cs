@@ -58,5 +58,23 @@ public class PlateKitchenObject : KitchenObject
         return kitchenObjectSOList;
     }
 
+    private RecipeSO recipe;
 
+    // Method to set the recipe on the plate
+    public void SetRecipe(RecipeSO recipeSO)
+    {
+        this.recipe = recipeSO;
+    }
+
+    // Method to get the current recipe on the plate (if any)
+    public RecipeSO GetRecipe()
+    {
+        return recipe;
+    }
+
+    // Method to check if the plate has a recipe
+    public bool HasRecipe()
+    {
+        return recipe != null;
+    }
 }
