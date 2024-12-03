@@ -3080,7 +3080,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32008675, y: -3.7382904e-16, z: -1.3861749e-15, w: 0.94738823}
+  m_LocalRotation: {x: 0.32008675, y: 3.7382904e-16, z: 1.3861749e-15, w: 0.94738823}
   m_LocalPosition: {x: -4.6, y: 44.7, z: -65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3987,6 +3987,8 @@ MonoBehaviour:
   prefabToInstantiate: {fileID: 7271011890705362211, guid: 7b2df0721d91c9146b1f30b9219f0ef1,
     type: 3}
   buildPoint: {fileID: 540071414}
+  cashManager: {fileID: 1107394848}
+  turretCost: 25
 --- !u!114 &417431611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6166,35 +6168,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.9425062
-      value: -6.5618076
-      inSlope: -0.325559
-      outSlope: -0.325559
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.95286655
-      value: 38.648277
-      inSlope: -0.17437226
-      outSlope: -0.17437226
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.9732827
-      value: -48.217587
-      inSlope: -50.56418
-      outSlope: -50.56418
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: -1.4
+      time: 0.99627686
+      value: -2.5445008
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -6210,15 +6185,15 @@ MonoBehaviour:
     - serializedVersion: 3
       time: -0.0049209595
       value: -100
-      inSlope: 1447.004
-      outSlope: 1447.004
+      inSlope: 1089.7404
+      outSlope: 1089.7404
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.063459665
-      value: -1.0529617
+      time: 0.08632496
+      value: -0.56564176
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -16250,7 +16225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034445143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32008675, y: -3.7382904e-16, z: -1.3861749e-15, w: 0.94738823}
+  m_LocalRotation: {x: 0.32008675, y: 3.7382904e-16, z: 1.3861749e-15, w: 0.94738823}
   m_LocalPosition: {x: -4.6, y: 44.7, z: -65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

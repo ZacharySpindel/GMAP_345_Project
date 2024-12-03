@@ -36,6 +36,14 @@ public class CashManager : MonoBehaviour
         Debug.Log("Cash Added: " + amount + ", New Cash: " + currentCash); // Debug log to track cash changes
         UpdateCashDisplay();
     }
+
+    public void SubtractToCash(int amount)
+    {
+        currentCash -= amount;
+        Debug.Log("Cash Added: " + amount + ", New Cash: " + currentCash); // Debug log to track cash changes
+        UpdateCashDisplay();
+    }
+
     // Retrieve the current cash value
     public int GetCashValue()
     {
