@@ -21,6 +21,7 @@ public class Goal : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
+        AudioManager.Instance.PlaySFX("Loss HP");
 
         // Update the slider's value to reflect the current health
         healthSlider.value = health;

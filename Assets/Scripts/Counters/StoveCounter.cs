@@ -32,6 +32,7 @@ public class StoveCounter : BaseCounter, IHasProgress
     private float burningTimer;
     private BurningRecipeSO burningRecipeSO;
 
+    private bool hasPlayedSound = false;
 
     private void Start()    
     {
@@ -48,12 +49,21 @@ public class StoveCounter : BaseCounter, IHasProgress
 
                 break;
 
-
-            case State.Frying:
-                fryingTimer += Time.deltaTime;
+               
+                case State.Frying:
+                    
+                    if (!hasPlayedSound)
+                    {
+                        AudioManager.Instance.PlaySFX("Pan Frying");
+                        hasPlayedSound = true;
+                    }
+                    
+                    fryingTimer += Time.deltaTime;
                 OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
                 {
+                    
                     progressNormalized = fryingTimer / fryingRecipeSO.fryingTimerMax
+
                 });
 
                     if (fryingTimer > fryingRecipeSO.fryingTimerMax)
@@ -66,6 +76,7 @@ public class StoveCounter : BaseCounter, IHasProgress
 
 
                         state = State.Fried;
+                        hasPlayedSound = false;
                         burningTimer = 0f;
                         burningRecipeSO = GetBurningRecipeSOWithInput(GetKitchenObject().GetKitchenObjectSO());
 
@@ -78,8 +89,14 @@ public class StoveCounter : BaseCounter, IHasProgress
                     }
                 break;
 
-
+            
             case State.Fried:
+                    
+                    if (!hasPlayedSound)
+                    {
+                        AudioManager.Instance.PlaySFX("Pan Frying");
+                        hasPlayedSound = true;
+                    }
                     burningTimer += Time.deltaTime;
                     OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedArgs
                     {
@@ -94,6 +111,8 @@ public class StoveCounter : BaseCounter, IHasProgress
 
                         KitchenObject.SpawnKitchenObject(burningRecipeSO.output, this);
                         state = State.Burned;
+                        hasPlayedSound = false;
+
 
 
                         OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
@@ -111,8 +130,9 @@ public class StoveCounter : BaseCounter, IHasProgress
 
 
             case State.Burned:
+                    hasPlayedSound = false;
 
-                break;
+                    break;
 
             }
             //Debug.Log(state);

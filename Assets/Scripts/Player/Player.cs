@@ -30,6 +30,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private Vector3 lastInteractDir;
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
+    //private bool isMoving;
+    //private Vector3 lastPosition;
 
     private void Awake()
     {
@@ -41,11 +43,14 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         Instance = this;
     }
 
+   
 
     private void Start()
     {
+        //lastPosition = transform.position;
         gameInput.OnInteractAction += GameInput_OnInteractAction;
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction; //have to tab this, cant type it out, weird
+            
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -209,6 +214,15 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         isWalking = moveDir != Vector3.zero;
         float rotateSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+
+        //Check if the player is moving for active the sound effect
+        //Vector3 currentPosition = transform.position;
+        //isMoving = (currentPosition != lastPosition);
+        //if (isMoving)
+        //{
+        //   Debug.Log("Player is moving!");
+        //    AudioManager.Instance.PlaySFX("Walking");
+        //}
     }
 
     // New method to get the current move speed based on sprinting

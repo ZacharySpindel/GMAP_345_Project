@@ -13,6 +13,9 @@ public class Turret : MonoBehaviour
     private float fireCooldown;
     private float fireDelayTimer;
 
+    private bool hasPlayedSound = false; 
+    // Tracks if the sound has been played for the current target
+
     private void Start()
     {
         fireCooldown = 0f;
@@ -56,7 +59,15 @@ public class Turret : MonoBehaviour
 
         if (rb != null)
         {
+            hasPlayedSound = false;
             rb.AddForce(shootPoint.forward * forwardForce, ForceMode.Impulse);
+        }
+
+        // Play sound effect only once when acquiring a new target
+        if (!hasPlayedSound)
+        {
+            AudioManager.Instance.PlaySFX("Magic_Fire Ball");
+            hasPlayedSound = true; // Mark sound as played
         }
     }
 
@@ -65,6 +76,8 @@ public class Turret : MonoBehaviour
         if (other.CompareTag("Enemy") && target == null)
         {
             target = other.transform;
+
+            
         }
     }
 

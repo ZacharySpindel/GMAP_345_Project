@@ -15,6 +15,7 @@ public class GameOverGoalManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            AudioManager.Instance.PlaySFX("Loss HP");
         }
     }
 
