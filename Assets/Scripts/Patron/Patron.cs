@@ -6,7 +6,7 @@ public class Patron : MonoBehaviour
 {
     private enum patronType { Customer, Recruit, Hire }
     private patronType currentStatus; // Current state of patrons
-    private float correctOrderCounter;  // how many correct orders you provide
+    public float correctOrderCounter;  // how many correct orders you provide
     private float recruitThreshold = 30; // Points needed to change states
 
     public Transform tablePosition;
@@ -37,10 +37,7 @@ public class Patron : MonoBehaviour
         currentStatus = patronType.Customer; // Start with Customer
         navmesh = GetComponent<UnityEngine.AI.NavMeshAgent>(); // sets up navmesh
         navmesh.speed = moveSpeed;
-        MoveToPoint(tablePosition);
-        // find table that matches IDs
-        // get that table's position
-        // move to that table (NavMesh?)
+        MoveToPoint(tablePosition);     // start at a table
     }
 
     void Update()
@@ -71,16 +68,19 @@ public class Patron : MonoBehaviour
         }
 
         // day
-        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
+        if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Day){
             // blank for now
         }
-        // dusk
-        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Dusk){
-            MoveToPoint(stationPosition);   // moves to predetermined position
+        
+        if(currentStatus == patronType.Recruit || currentStatus == patronType.Hire){
+            // dusk
+            if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Dusk){
+                MoveToPoint(stationPosition);   // moves to predetermined position
+            }
+            // night
+            if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Night){
+                TurretMode();
         }
-        // night
-        else if(dayNightDuskCycle.currentTimeOfDay == DayNightDuskCycle.TimeOfDay.Night){
-            TurretMode();
         }
     }
 
@@ -89,7 +89,7 @@ public class Patron : MonoBehaviour
     {
         navmesh.SetDestination(transform.position);
     }
-    
+
     // a recruited patron needs to go back into customer when dawn hits (we need dawn as well)
     public void RecruitToCustomer()
     {
@@ -97,14 +97,6 @@ public class Patron : MonoBehaviour
         {
             currentStatus = patronType.Customer;
         }
-    }
-
-    // math behind patron recruit points
-    public void PatronRecruitPoints()
-    {
-        //lettuce & tomato = 5, cheese = 10, meat & bun = 5
-
-
     }
 
     // turret mode
@@ -124,6 +116,7 @@ public class Patron : MonoBehaviour
 
             if (fireCooldown <= 0f)
             {
+                Debug.Log("shitting");
                 Shoot();
                 fireCooldown = 1f / fireRate;
             }
@@ -151,12 +144,9 @@ public class Patron : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")){
-            Debug.Log("collider works");
-        }
-
         if (other.CompareTag("Enemy") && target == null)
         {
+            Debug.Log("collider works");
             target = other.transform;
         }
     }

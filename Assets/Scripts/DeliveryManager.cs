@@ -104,6 +104,7 @@ public class DeliveryManager : MonoBehaviour
 
                         // Reward the player based on the cashReward of the recipe
                         CashManager.Instance.AddToCash(waitingRecipeSO.cashReward);
+                        //PatronManager.Instance.PatronRecruitPoints(deliveryCounterID, waitingRecipeSO.cashReward);
                         Debug.Log($"Player received {waitingRecipeSO.cashReward} cash for delivering {waitingRecipeSO.recipeName}");
 
                         waitingRecipeSOList.RemoveAt(i);

@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Buildable
   - ProjectileBurger
+  - Patron
   layers:
   - Default
   - TransparentFX
