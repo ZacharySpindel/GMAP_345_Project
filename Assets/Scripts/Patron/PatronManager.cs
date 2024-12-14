@@ -8,10 +8,25 @@ public class PatronManager : MonoBehaviour
 
     private GameObject[] PatronList;
 
+     private void Awake()
+    {
+        // Singleton setup
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         if (PatronList == null){
             PatronList = GameObject.FindGameObjectsWithTag("Patron");
+            // Debug.Log("patronlist has "+ PatronList.Length + " many patrons");
+            PatronRecruitPoints("triangle", 1);
         }
     }
 
