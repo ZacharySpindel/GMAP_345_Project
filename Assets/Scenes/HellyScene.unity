@@ -7919,7 +7919,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32008675, y: 0.000000028234373, z: -0.000000009539329, w: 0.9473883}
+  m_LocalRotation: {x: 0.32008675, y: 3.7382904e-16, z: 1.3861749e-15, w: 0.94738823}
   m_LocalPosition: {x: -4.6, y: 44.7, z: -65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11402,9 +11402,9 @@ MonoBehaviour:
   - {fileID: 1040083170}
   rotatingImage: {fileID: 1482376472}
   winImage: {fileID: 194861393}
-  dayDuration: 1
-  duskDuration: 1
-  nightDuration: 80
+  dayDuration: 30
+  duskDuration: 30
+  nightDuration: 30
   dawnDuration: 2
   dayCurve:
     serializedVersion: 2
@@ -13179,7 +13179,7 @@ MonoBehaviour:
     type: 3}
   squareSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
-  circleSprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
+  circleSprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b,
     type: 3}
   starSprite: {fileID: 21300000, guid: bfa45b2279ff0314d93351693af3920d, type: 3}
 --- !u!1 &895599987
@@ -26841,7 +26841,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034445143}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.32008675, y: 0.000000028234373, z: -0.000000009539329, w: 0.9473883}
+  m_LocalRotation: {x: 0.32008675, y: 3.7382904e-16, z: 1.3861749e-15, w: 0.94738823}
   m_LocalPosition: {x: -4.6, y: 44.7, z: -65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
